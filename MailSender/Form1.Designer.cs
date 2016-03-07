@@ -42,9 +42,9 @@
             this.btnSelectMine = new System.Windows.Forms.Button();
             this.btnStartSend = new System.Windows.Forms.Button();
             this.panel = new System.Windows.Forms.Panel();
-            this.rBtnInclude = new System.Windows.Forms.RadioButton();
-            this.rBtnExclude = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
+            this.rBtnExclude = new System.Windows.Forms.RadioButton();
+            this.rBtnInclude = new System.Windows.Forms.RadioButton();
             this.lViewHosList = new System.Windows.Forms.ListView();
             this.lViewSendList = new System.Windows.Forms.ListView();
             this.panel.SuspendLayout();
@@ -173,17 +173,14 @@
             this.panel.Size = new System.Drawing.Size(135, 90);
             this.panel.TabIndex = 16;
             // 
-            // rBtnInclude
+            // label1
             // 
-            this.rBtnInclude.AutoSize = true;
-            this.rBtnInclude.Font = new System.Drawing.Font("굴림", 9F);
-            this.rBtnInclude.Location = new System.Drawing.Point(3, 34);
-            this.rBtnInclude.Name = "rBtnInclude";
-            this.rBtnInclude.Size = new System.Drawing.Size(32, 16);
-            this.rBtnInclude.TabIndex = 0;
-            this.rBtnInclude.Text = "O";
-            this.rBtnInclude.UseVisualStyleBackColor = true;
-            this.rBtnInclude.CheckedChanged += new System.EventHandler(this.rBtnInclude_CheckedChanged);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 10);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(109, 12);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "중복 발송 허용여부";
             // 
             // rBtnExclude
             // 
@@ -198,14 +195,17 @@
             this.rBtnExclude.UseVisualStyleBackColor = true;
             this.rBtnExclude.CheckedChanged += new System.EventHandler(this.rBtnExclude_CheckedChanged);
             // 
-            // label1
+            // rBtnInclude
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 10);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(109, 12);
-            this.label1.TabIndex = 17;
-            this.label1.Text = "중복 발송 허용여부";
+            this.rBtnInclude.AutoSize = true;
+            this.rBtnInclude.Font = new System.Drawing.Font("굴림", 9F);
+            this.rBtnInclude.Location = new System.Drawing.Point(3, 34);
+            this.rBtnInclude.Name = "rBtnInclude";
+            this.rBtnInclude.Size = new System.Drawing.Size(32, 16);
+            this.rBtnInclude.TabIndex = 0;
+            this.rBtnInclude.Text = "O";
+            this.rBtnInclude.UseVisualStyleBackColor = true;
+            this.rBtnInclude.CheckedChanged += new System.EventHandler(this.rBtnInclude_CheckedChanged);
             // 
             // lViewHosList
             // 
@@ -248,6 +248,7 @@
             this.Controls.Add(this.lblYear);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.panel.ResumeLayout(false);
             this.panel.PerformLayout();
             this.ResumeLayout(false);

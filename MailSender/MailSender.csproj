@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6B005CB4-F9F8-40D8-9193-E7068D253BF9}</ProjectGuid>
+    <ProjectGuid>{04DB53E2-BF4E-42B6-A63C-2A10073576C4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MailSender</RootNamespace>
