@@ -29,8 +29,12 @@ namespace MailSender
  
         }
 
-        private void InitDB()//병원정보 있는 엑셀파일이랑 메일정보 있는 엑셀파일이랑 2개가 있음.
+        public void InitDB()//병원정보 있는 엑셀파일이랑 메일정보 있는 엑셀파일이랑 2개가 있음.
         {
+            String strServCheck = @"\\fileserver1\기술지원부\05_PS Team\유지보수 월별통계\2016-03_점검통계.xlsx";
+            ExcelAccess servCheck = new ExcelAccess(strServCheck);
+            servCheck.SelectSheet("병원");
+            Array exData = servCheck.GetRange("E2", "G386");
         }
 
 

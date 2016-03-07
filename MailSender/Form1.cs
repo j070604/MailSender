@@ -22,7 +22,7 @@ namespace MailSender
         {
             string connStr = @"\\fileserver1\기술지원부\05_PS Team\점검 사용 프로그램\MailSender\MailSender.db";
             DBHandler dbhd = new DBHandler();
-            dbhd.CreateDB(connStr);
+            dbhd.InitDB();
         }
 
         private void rBtnInclude_CheckedChanged(object sender, EventArgs e)
