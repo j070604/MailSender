@@ -29,5 +29,10 @@ namespace MailSender
  
         }
 
+        private void InitDB()//병원정보 있는 엑셀파일이랑 메일정보 있는 엑셀파일이랑 2개가 있음.
+        {
+        }
+
+
     }
 }
