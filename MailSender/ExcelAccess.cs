@@ -7,7 +7,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace MailSender
 {
-    class ExcelAccess
+    class ExcelAccess : IDisposable
     {
         //하나의 ExcelAccess 객체가 1개의 엑셀 파일에 접근한다.
         Excel.Application xlApp;
@@ -15,35 +15,25 @@ namespace MailSender
         Excel.Worksheet xlWorkSheet;
         Excel.Worksheet xlWriteSheet;
 
+        String fileName;
+
         public ExcelAccess(String fileName)
         {
             OpenExcelFile(fileName);
         }
+
         public ExcelAccess()
         {
 
         }
 
-        ~ExcelAccess()
-        {
-            /*
-             * 열려있는 엑셀 파일이 수정가능한지 아닌지 확인한 후에 저장후 release 또는 즉시 release 
-             * */
-//          string a = @"2016-03_점검통계.xlsx";
-//            xlWorkBook.SaveAs(a, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
-//            xlWorkBook.Close();
-//            xlApp.Quit();
-
-            if (xlWorkSheet != null) { releaseObject(xlWorkSheet); }
-            if (xlWorkBook != null) { releaseObject(xlWorkBook); }
-            if (xlApp != null) { releaseObject(xlApp); }
-        }
 
         public bool OpenExcelFile(String fileName)
         {
             xlApp = new Excel.Application();
             xlApp.DisplayAlerts = false;
             xlWorkBook = xlApp.Workbooks.Open(fileName, 0, false, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+            this.fileName = fileName;
             return true;
         }
 
@@ -77,6 +67,20 @@ namespace MailSender
                 GC.Collect();
             }
 
+        }
+
+        /*
+         * readonly, writeable
+         * */
+        public void Dispose()
+        {
+            xlWorkBook.SaveAs(fileName, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+            xlWorkBook.Close();
+            xlApp.Quit();
+
+            if (xlWorkSheet != null) { releaseObject(xlWorkSheet); }
+            if (xlWorkBook != null) { releaseObject(xlWorkBook); }
+            if (xlApp != null) { releaseObject(xlApp); }
         }
     }
 }
