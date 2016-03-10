@@ -35,13 +35,17 @@
             this.lblFolderPath = new System.Windows.Forms.Label();
             this.tBoxMsg = new System.Windows.Forms.TextBox();
             this.tBoxFolderPath = new System.Windows.Forms.TextBox();
+            this.FileFormat = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lblFileFormat = new System.Windows.Forms.Label();
+            this.tBoxFileFormat = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // listView1
             // 
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.HosName,
-            this.FolderName});
+            this.FolderName,
+            this.FileFormat});
             this.listView1.Location = new System.Drawing.Point(12, 12);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(583, 315);
@@ -92,11 +96,34 @@
             this.tBoxFolderPath.Size = new System.Drawing.Size(504, 21);
             this.tBoxFolderPath.TabIndex = 4;
             // 
+            // FileFormat
+            // 
+            this.FileFormat.Text = "FileFormat";
+            this.FileFormat.Width = 179;
+            // 
+            // lblFileFormat
+            // 
+            this.lblFileFormat.AutoSize = true;
+            this.lblFileFormat.Location = new System.Drawing.Point(12, 391);
+            this.lblFileFormat.Name = "lblFileFormat";
+            this.lblFileFormat.Size = new System.Drawing.Size(72, 12);
+            this.lblFileFormat.TabIndex = 5;
+            this.lblFileFormat.Text = "FileFormat :";
+            // 
+            // tBoxFileFormat
+            // 
+            this.tBoxFileFormat.Location = new System.Drawing.Point(91, 388);
+            this.tBoxFileFormat.Name = "tBoxFileFormat";
+            this.tBoxFileFormat.Size = new System.Drawing.Size(504, 21);
+            this.tBoxFileFormat.TabIndex = 6;
+            // 
             // InitDB
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(789, 479);
+            this.Controls.Add(this.tBoxFileFormat);
+            this.Controls.Add(this.lblFileFormat);
             this.Controls.Add(this.tBoxFolderPath);
             this.Controls.Add(this.tBoxMsg);
             this.Controls.Add(this.lblFolderPath);
@@ -104,6 +131,7 @@
             this.Controls.Add(this.listView1);
             this.Name = "InitDB";
             this.Text = "InitDB";
+            this.Load += new System.EventHandler(this.InitDB_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -118,5 +146,8 @@
         private System.Windows.Forms.Label lblFolderPath;
         private System.Windows.Forms.TextBox tBoxMsg;
         private System.Windows.Forms.TextBox tBoxFolderPath;
+        private System.Windows.Forms.ColumnHeader FileFormat;
+        private System.Windows.Forms.Label lblFileFormat;
+        private System.Windows.Forms.TextBox tBoxFileFormat;
     }
 }
