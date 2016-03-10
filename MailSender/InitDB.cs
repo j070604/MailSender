@@ -16,6 +16,11 @@ namespace MailSender
         List<String> folderList;
         List<String> excelList;
 
+        String exFilePath;
+        String folderPath;
+
+        DBHandler dbhandler;
+
         public InitDB()
         {
             InitializeComponent();
@@ -23,12 +28,14 @@ namespace MailSender
 
         private void InitDB_Load(object sender, EventArgs e)
         {
+            dbhandler = DBHandler.GetInstance();
+
             excelList = new List<String>();
-            String exFilePath = GetExFilePath();
+            exFilePath = GetExFilePath();
             InitHospitalList(excelList, exFilePath); // 엑셀에서 병원 리스트를 가져온다
 
             folderList = new List<String>();
-            String folderPath = GetHosFolderPath();
+            folderPath = GetHosFolderPath();
             InitFolderList(folderList, folderPath);  //파일서버에서 폴더 리스트를 가져온다.
            
             //매칭시작 
@@ -168,7 +175,7 @@ namespace MailSender
              */
             if(listView1.Items.Count ==1)
             {
-                //save the info DB
+                //save info the DB
                 //remove firstexcellist
                 Matching();
             }
@@ -179,7 +186,7 @@ namespace MailSender
             for (int i = files.Length - 1; i >= 0; i--)
             {
                 if (isValidFormat(files[i]))
-                    return files[i].Replace("2015", "yyyy").Replace("12", "mm")..Replace("01", "mm")..Replace("02", "mm").Replace("2016", "yyyy");
+                    return files[i].Replace("2015", "yyyy").Replace("12", "mm").Replace("01", "mm").Replace("02", "mm").Replace("2016", "yyyy");
             }
             return null;
         }
