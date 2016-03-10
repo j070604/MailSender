@@ -177,6 +177,7 @@ namespace MailSender
             {
                 //save info the DB
                 //remove firstexcellist
+                dbhandler.InsertHospital(new HospitalData(listView1.Items[0].SubItems[0].Text, listView1.Items[0].SubItems[1].Text, listView1.Items[0].SubItems[2].Text, folderPath));
                 Matching();
             }
         }
