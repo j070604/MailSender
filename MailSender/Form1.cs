@@ -41,6 +41,12 @@ namespace MailSender
             }  
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            InitDB initDB = new InitDB();
+            initDB.Show();
+        }
+
         
     }
 }

@@ -100,18 +100,20 @@ namespace MailSender
         {
             Array exData;
 
-            using (ExcelAccess servCheck = new ExcelAccess(exFilePath))
+            using (ExcelAccess servCheck = new ExcelAccess(exFilePath, "aaaaaaaaa"))
             {
                 servCheck.SelectSheet("병원");
-                exData = servCheck.GetRange("E2", "G386");
-                excelList = ConvertArrayToList(exData);
+                exData = servCheck.GetRange("E2", "G295");
+                ConvertArrayToList(excelList, exData); //그냥 array 값을 수동으로 읽어와서 반복문에서 하나하나 입력해 주는게 나을 것 같다.
             }
+            //return ConvertArrayToList(exData);
         }
 
         private List<String> ConvertArrayToList(Array array)
         {
+            const int arrayWidth = 3;
             List<String> excelList = new List<String>();
-            for (int i = 1; i <= array.Length; i++)
+            for (int i = 1; i <= array.Length / arrayWidth; i++)
             {
                 if (array.GetValue(i, 1) == null)
                     continue;
@@ -121,6 +123,21 @@ namespace MailSender
                     excelList.Add(array.GetValue(i, 1).ToString());
             }
             return excelList;
+        }
+
+        private void ConvertArrayToList(List<String> excelList, Array array)
+        {
+            const int arrayWidth = 3;
+
+            for (int i = 1; i <= array.Length / arrayWidth; i++)
+            {
+                if (array.GetValue(i, 1) == null)
+                    continue;
+                if ((String)array.GetValue(i, 3) == "매월")
+                    continue;
+                else
+                    excelList.Add(array.GetValue(i, 1).ToString());
+            }
         }
 
         private string GetFolderList(List<String> hosFolderList)
@@ -146,12 +163,15 @@ namespace MailSender
 
         private void Matching()
         {
-            String exHosName = excelList.First();
-            if (exHosName == null)
-                return;
-
             listView1.Items.Clear();
             ListViewItem lvi;
+
+            String exHosName = excelList.First();
+            if (exHosName == null)
+            {
+                tBoxMsg.Text = "excleList is empty";
+                return;
+            }
 
             for (int i = 0; i < folderList.Count; i++)
             {
@@ -178,16 +198,18 @@ namespace MailSender
                 //save info the DB
                 //remove firstexcellist
                 dbhandler.InsertHospital(new HospitalData(listView1.Items[0].SubItems[0].Text, listView1.Items[0].SubItems[1].Text, listView1.Items[0].SubItems[2].Text, folderPath));
+                excelList.RemoveAt(0);
                 Matching();
             }
         }
         private String GetFileFormat(String folderPath)
         {
-            string[] files = Directory.GetFiles(folderPath).Select(path => Path.GetFileName(path)).ToArray();
+            String folderFullPath = this.folderPath + "\\" + folderPath;
+            string[] files = Directory.GetFiles(folderFullPath).Select(path => Path.GetFileName(path)).ToArray(); // 예외처리 필요한가
             for (int i = files.Length - 1; i >= 0; i--)
             {
                 if (isValidFormat(files[i]))
-                    return files[i].Replace("2015", "yyyy").Replace("12", "mm").Replace("01", "mm").Replace("02", "mm").Replace("2016", "yyyy");
+                    return files[i].Replace("2016", "yyyy").Replace("2015", "yyyy").Replace("02", "mm").Replace("01", "mm").Replace("12", "mm");
             }
             return null;
         }
@@ -224,6 +246,26 @@ namespace MailSender
             }
             return (10 * count - 8 * hosName.Length > 0) ? true : false;
         }
+
+        private void btnSkip_Click(object sender, EventArgs e)
+        {
+            excelList.RemoveAt(0);
+            Matching();
+        }
+
+        private void btnInput_Click(object sender, EventArgs e)
+        {
+            dbhandler.InsertHospital(new HospitalData(excelList.First(),tBoxFolderName.Text, tBoxFileFormat.Text, folderPath));
+            excelList.RemoveAt(0);
+            Matching();
+        }
+
+        private void listView1_DoubleClick(object sender, EventArgs e)
+        {
+            dbhandler.InsertHospital(new HospitalData(listView1.SelectedItems[0].SubItems[0].Text, listView1.SelectedItems[0].SubItems[1].Text, listView1.SelectedItems[0].SubItems[2].Text, folderPath));
+        }
+
+
 
     }
 }

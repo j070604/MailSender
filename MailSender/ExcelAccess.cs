@@ -22,6 +22,11 @@ namespace MailSender
             OpenExcelFile(fileName);
         }
 
+        public ExcelAccess(String fileName, String flag)
+        {
+            OpenExcelFile(fileName, flag);
+        }
+
         public ExcelAccess()
         {
 
@@ -33,6 +38,15 @@ namespace MailSender
             xlApp = new Excel.Application();
             xlApp.DisplayAlerts = false;
             xlWorkBook = xlApp.Workbooks.Open(fileName, 0, false, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+            this.fileName = fileName;
+            return true;
+        }
+
+        public bool OpenExcelFile(String fileName, String flag)
+        {
+            xlApp = new Excel.Application();
+            xlApp.DisplayAlerts = false;
+            xlWorkBook = xlApp.Workbooks.Open(fileName, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
             this.fileName = fileName;
             return true;
         }
@@ -74,7 +88,10 @@ namespace MailSender
          * */
         public void Dispose()
         {
-            xlWorkBook.SaveAs(fileName, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+            if(xlWorkBook.ReadOnly == false)
+            {
+                xlWorkBook.SaveAs(fileName, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+            }
             xlWorkBook.Close();
             xlApp.Quit();
 

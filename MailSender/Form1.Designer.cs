@@ -47,6 +47,7 @@
             this.rBtnInclude = new System.Windows.Forms.RadioButton();
             this.lViewHosList = new System.Windows.Forms.ListView();
             this.lViewSendList = new System.Windows.Forms.ListView();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -225,11 +226,22 @@
             this.lViewSendList.TabIndex = 19;
             this.lViewSendList.UseCompatibleStateImageBehavior = false;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(787, 4);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 20;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(944, 682);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.lViewSendList);
             this.Controls.Add(this.lViewHosList);
             this.Controls.Add(this.panel);
@@ -277,6 +289,7 @@
         private System.Windows.Forms.RadioButton rBtnInclude;
         private System.Windows.Forms.ListView lViewHosList;
         private System.Windows.Forms.ListView lViewSendList;
+        private System.Windows.Forms.Button button1;
     }
 }
 
