@@ -18,8 +18,10 @@ namespace MailSender
 
         String exFilePath;
         String folderPath;
-
+        
         DBHandler dbhandler;
+
+        const int LISTVIEW_ROOF_START = 1;
 
         public InitDB()
         {
@@ -40,7 +42,8 @@ namespace MailSender
            
             //매칭시작 
 
-            Matching();
+            //Matching();
+            EMail();
         }
         /**/
 
@@ -49,7 +52,7 @@ namespace MailSender
             System.IO.DirectoryInfo Info = new System.IO.DirectoryInfo(folderPath);
             if (Info.Exists)
             {
-                System.IO.DirectoryInfo[] CInfo = Info.GetDirectories("*", System.IO.SearchOption.AllDirectories);
+                System.IO.DirectoryInfo[] CInfo = Info.GetDirectories("*", System.IO.SearchOption.TopDirectoryOnly);
                 foreach (System.IO.DirectoryInfo info in CInfo)
                 {
                     folderList.Add(info.Name);
@@ -139,39 +142,24 @@ namespace MailSender
                     excelList.Add(array.GetValue(i, 1).ToString());
             }
         }
-
-        private string GetFolderList(List<String> hosFolderList)
-        {
-            System.Windows.Forms.FolderBrowserDialog folderDialog = new System.Windows.Forms.FolderBrowserDialog();
-            string fsRootFolder = @"\\Fileserver1\TechHeim\TH\병원";
-            if (Directory.Exists(fsRootFolder))
-                folderDialog.SelectedPath = fsRootFolder;
-
-            folderDialog.ShowDialog();
-            string path = folderDialog.SelectedPath;
-            System.IO.DirectoryInfo Info = new System.IO.DirectoryInfo(path);
-            if (Info.Exists)
-            {
-                System.IO.DirectoryInfo[] CInfo = Info.GetDirectories("*", System.IO.SearchOption.AllDirectories);
-                foreach (System.IO.DirectoryInfo info in CInfo)
-                {
-                    hosFolderList.Add(info.Name);
-                }
-            }
-            return path;
-        }
-
+       
         private void Matching()
         {
             listView1.Items.Clear();
             ListViewItem lvi;
 
-            String exHosName = excelList.First();
-            if (exHosName == null)
+            String exHosName;
+            try
+            {
+                exHosName = excelList.First();
+            }
+            catch
             {
                 tBoxMsg.Text = "excleList is empty";
                 return;
             }
+
+            InsertDefaultItem(exHosName);
 
             for (int i = 0; i < folderList.Count; i++)
             {
@@ -181,36 +169,106 @@ namespace MailSender
                     lvi.SubItems.Add(folderList[i]);
                     String fileFormat = GetFileFormat(folderList[i]);
                     lvi.SubItems.Add(fileFormat);
-                    listView1.Items.Insert(0, lvi);
+                    listView1.Items.Insert(listView1.Items.Count, lvi);
                 }
             }
+            InsertItem(); 
+        }
 
-            /*
-             * 1. 엑셀리스트에서 하나 가져온다.
-             * 2. 폴더리스트의 목록에서 반복하여 유사한 폴더일 경우 listview에 등록한다.
-             * 2.1 폴더 안을 탐색하여 파일 포멧까지 가져온다.
-             * 3 - 1. listview에 등록된 목록이 1개면 그대로 등록한다.
-             * 3 - 2. listview에 등록된 목록이 0 or 2개이상이면 사용자에게 입력을 받는다.
-             * 3 - 3.
-             */
-            if(listView1.Items.Count ==1)
+        private void InsertDefaultItem(String exHosName)
+        {
+            ListViewItem lvi = new ListViewItem(exHosName);
+            listView1.Items.Insert(0, lvi);
+        }
+
+        private void InsertItem()
+        {
+            const int FOLDER_NOT_FOUNT = 1;
+            const int DEFAULT_INSERT_BY_FOLDERNUM = 2;
+            const int DEFAULT_INSERT_BY_FORMATNUM = 1;
+            const int INSERT_SELECT_NEED = 3;
+
+            if (listView1.Items.Count == DEFAULT_INSERT_BY_FOLDERNUM)
             {
-                //save info the DB
-                //remove firstexcellist
-                dbhandler.InsertHospital(new HospitalData(listView1.Items[0].SubItems[0].Text, listView1.Items[0].SubItems[1].Text, listView1.Items[0].SubItems[2].Text, folderPath));
-                excelList.RemoveAt(0);
+                const int DEFAULT_INSERT_INDEX = 1;
+                InsertHospital(listView1.Items[DEFAULT_INSERT_INDEX]);
                 Matching();
             }
+            else if (CountFileFormat() == DEFAULT_INSERT_BY_FORMATNUM)
+            {
+                int index = GetFileFormatIndex();
+                InsertHospital(listView1.Items[index]);
+                Matching();
+            }
+            else if (listView1.Items.Count == FOLDER_NOT_FOUNT)
+            {
+                tBoxMsg.Text = listView1.Items[0].SubItems[0].Text + " 는 수동 입력이 필요합니다.";
+            }
+            else if (listView1.Items.Count >= INSERT_SELECT_NEED) //선택이 필요한 경우 HosName == FolderName 이면 그냥 Insert 한다.
+            {
+                for (int i = LISTVIEW_ROOF_START; i < listView1.Items.Count; i++)
+                {
+                    if (listView1.Items[i].SubItems[0].Text.Equals(listView1.Items[i].SubItems[1].Text))
+                    {
+                        InsertHospital(listView1.Items[i]);
+                        Matching();
+                        break;
+                    }
+                }
+            }  
         }
+
+        private int GetFileFormatIndex()
+        {
+            const int formatColIndex = 2;
+
+            for (int i = LISTVIEW_ROOF_START; i < listView1.Items.Count; i++)
+            {
+                if (!String.IsNullOrWhiteSpace(listView1.Items[i].SubItems[formatColIndex].Text))
+                    return i;
+            }
+            return -1;
+        }
+        
+        private int CountFileFormat()
+        {
+            int count = 0;
+            const int formatColIndex = 2;
+            for (int i = LISTVIEW_ROOF_START; i < listView1.Items.Count; i++)
+            {
+                if (!String.IsNullOrWhiteSpace(listView1.Items[i].SubItems[formatColIndex].Text))
+                    ++count;
+            }
+            return count;
+        }
+
         private String GetFileFormat(String folderPath)
         {
             String folderFullPath = this.folderPath + "\\" + folderPath;
-            string[] files = Directory.GetFiles(folderFullPath).Select(path => Path.GetFileName(path)).ToArray(); // 예외처리 필요한가
+            string [] files;
+            try
+            {
+                files = Directory.GetFiles(folderFullPath).Select(path => Path.GetFileName(path)).ToArray(); // 예외처리 필요한가
+            }
+            catch
+            {
+                String BGSFolder = @"\\fileserver1\TechHeim\TH\보건소\";
+                files = Directory.GetFiles(BGSFolder + folderPath).Select(path => Path.GetFileName(path)).ToArray();
+            }
+            
             for (int i = files.Length - 1; i >= 0; i--)
             {
                 if (isValidFormat(files[i]))
-                    return files[i].Replace("2016", "yyyy").Replace("2015", "yyyy").Replace("02", "mm").Replace("01", "mm").Replace("12", "mm");
+                    return ReplaceStr(files[i]);
             }
+            return null;
+        }
+
+        private String ReplaceStr(String str)
+        {
+            if(!String.IsNullOrWhiteSpace(str))
+                return str.Replace("2016", "yyyy").Replace("2015", "yyyy").Replace("02", "mm").Replace("01", "mm").Replace("12", "mm").Replace("03", "mm");
+
             return null;
         }
 
@@ -255,17 +313,61 @@ namespace MailSender
 
         private void btnInput_Click(object sender, EventArgs e)
         {
-            dbhandler.InsertHospital(new HospitalData(excelList.First(),tBoxFolderName.Text, tBoxFileFormat.Text, folderPath));
-            excelList.RemoveAt(0);
+            String[] temp = tBoxFolderName.Text.Split('\\');
+            String folderName = temp[temp.Count() - 1];
+
+            int numToRomove = temp.Length - 1;
+
+            temp = temp.Take(temp.Count() - 1).ToArray();
+
+            InsertHospital(excelList.First(), folderName, GetFileFormat(folderName), String.Join("\\", temp));
             Matching();
         }
 
         private void listView1_DoubleClick(object sender, EventArgs e)
         {
-            dbhandler.InsertHospital(new HospitalData(listView1.SelectedItems[0].SubItems[0].Text, listView1.SelectedItems[0].SubItems[1].Text, listView1.SelectedItems[0].SubItems[2].Text, folderPath));
+            InsertHospital(listView1.SelectedItems[0]);
+            Matching();
+        }
+
+        private void InsertHospital(ListViewItem item)
+        {
+            InsertHospital(item.SubItems[0].Text, item.SubItems[1].Text, item.SubItems[2].Text, folderPath);
+        }
+
+        private void InsertHospital(String hosName, String folderName, String fileFormat, String folderPath)
+        {
+            int result = dbhandler.InsertHospital(new HospitalData(hosName, folderName, fileFormat, folderPath));
+            if(result > 0)
+                tBoxMsg.Text = hosName + " is inserted"; 
+            else if (result < 0)
+                tBoxMsg.Text = hosName + " insert is failed"; 
+            
+            excelList.RemoveAt(0);
         }
 
 
+        /*
+         * 1. 점검표 발송 리스트에서 FolderFullPath list 와 email list를 가져온다.
+         * 2. FolderFullPath를 Hospital table 에서 쿼리하여 Name을 가져온다.
+         * 3. Name과 EMail를 Mail Table에 Insert 한다.
+         * 4. FolderFullPath list가 없으면 어쩐담?
+         * 
+         * */
+        private void EMail()
+        {
+            String eMailList = GetExFilePath();
+
+            Array exData;
+
+            using (ExcelAccess servCheck = new ExcelAccess(eMailList, "aaaaaaaaa")) //open read only
+            {
+                servCheck.SelectSheet("병원 - 2016");
+                exData = servCheck.GetRange("B2", "Q270");
+            }
+
+
+        }
 
     }
 }

@@ -46,7 +46,5 @@ namespace MailSender
             InitDB initDB = new InitDB();
             initDB.Show();
         }
-
-        
     }
 }

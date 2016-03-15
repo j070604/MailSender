@@ -36,8 +36,6 @@
             this.lblFolderName = new System.Windows.Forms.Label();
             this.tBoxMsg = new System.Windows.Forms.TextBox();
             this.tBoxFolderName = new System.Windows.Forms.TextBox();
-            this.lblFileFormat = new System.Windows.Forms.Label();
-            this.tBoxFileFormat = new System.Windows.Forms.TextBox();
             this.btnSkip = new System.Windows.Forms.Button();
             this.btnInput = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -104,25 +102,9 @@
             this.tBoxFolderName.Size = new System.Drawing.Size(504, 21);
             this.tBoxFolderName.TabIndex = 4;
             // 
-            // lblFileFormat
-            // 
-            this.lblFileFormat.AutoSize = true;
-            this.lblFileFormat.Location = new System.Drawing.Point(12, 391);
-            this.lblFileFormat.Name = "lblFileFormat";
-            this.lblFileFormat.Size = new System.Drawing.Size(72, 12);
-            this.lblFileFormat.TabIndex = 5;
-            this.lblFileFormat.Text = "FileFormat :";
-            // 
-            // tBoxFileFormat
-            // 
-            this.tBoxFileFormat.Location = new System.Drawing.Point(91, 388);
-            this.tBoxFileFormat.Name = "tBoxFileFormat";
-            this.tBoxFileFormat.Size = new System.Drawing.Size(513, 21);
-            this.tBoxFileFormat.TabIndex = 6;
-            // 
             // btnSkip
             // 
-            this.btnSkip.Location = new System.Drawing.Point(610, 354);
+            this.btnSkip.Location = new System.Drawing.Point(610, 330);
             this.btnSkip.Name = "btnSkip";
             this.btnSkip.Size = new System.Drawing.Size(75, 23);
             this.btnSkip.TabIndex = 7;
@@ -132,7 +114,7 @@
             // 
             // btnInput
             // 
-            this.btnInput.Location = new System.Drawing.Point(610, 386);
+            this.btnInput.Location = new System.Drawing.Point(610, 354);
             this.btnInput.Name = "btnInput";
             this.btnInput.Size = new System.Drawing.Size(75, 23);
             this.btnInput.TabIndex = 8;
@@ -147,8 +129,6 @@
             this.ClientSize = new System.Drawing.Size(789, 479);
             this.Controls.Add(this.btnInput);
             this.Controls.Add(this.btnSkip);
-            this.Controls.Add(this.tBoxFileFormat);
-            this.Controls.Add(this.lblFileFormat);
             this.Controls.Add(this.tBoxFolderName);
             this.Controls.Add(this.tBoxMsg);
             this.Controls.Add(this.lblFolderName);
@@ -172,8 +152,6 @@
         private System.Windows.Forms.TextBox tBoxMsg;
         private System.Windows.Forms.TextBox tBoxFolderName;
         private System.Windows.Forms.ColumnHeader FileFormat;
-        private System.Windows.Forms.Label lblFileFormat;
-        private System.Windows.Forms.TextBox tBoxFileFormat;
         private System.Windows.Forms.Button btnSkip;
         private System.Windows.Forms.Button btnInput;
     }
