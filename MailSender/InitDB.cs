@@ -31,18 +31,19 @@ namespace MailSender
         private void InitDB_Load(object sender, EventArgs e)
         {
             dbhandler = DBHandler.GetInstance();
-
+            /*
             excelList = new List<String>();
-            exFilePath = GetExFilePath();
+            exFilePath = PathInfo.GetExFilePath(@"\\fileserver1\기술지원부\05_PS Team\유지보수 월별통계"); //GetExFilePath();
             InitHospitalList(excelList, exFilePath); // 엑셀에서 병원 리스트를 가져온다
 
             folderList = new List<String>();
-            folderPath = GetHosFolderPath();
+            folderPath = PathInfo.GetHosFolderPath(@"\\Fileserver1\TechHeim\TH\병원"); //GetHosFolderPath();
             InitFolderList(folderList, folderPath);  //파일서버에서 폴더 리스트를 가져온다.
            
             //매칭시작 
 
-            //Matching();
+            Matching();
+            */
             EMail();
         }
         /**/
@@ -54,50 +55,11 @@ namespace MailSender
             {
                 System.IO.DirectoryInfo[] CInfo = Info.GetDirectories("*", System.IO.SearchOption.TopDirectoryOnly);
                 foreach (System.IO.DirectoryInfo info in CInfo)
-                {
                     folderList.Add(info.Name);
-                }
             }
         }
 
-        private String GetHosFolderPath()
-        {
-            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
-            string defaultFolder = @"\\Fileserver1\TechHeim\TH\병원";
-            if (Directory.Exists(defaultFolder))
-                folderDialog.SelectedPath = defaultFolder;
-
-            folderDialog.ShowDialog();
-
-            return folderDialog.SelectedPath;
-        }
-
-        private String GetExFilePath()
-        {
-            OpenFileDialog openFile = new OpenFileDialog();
-            
-            String defaultFolder = @"\\fileserver1\기술지원부\05_PS Team\유지보수 월별통계";
-            if (Directory.Exists(defaultFolder))
-                openFile.InitialDirectory = defaultFolder;
-
-            openFile.DefaultExt = "xlsx";
-          
-            do
-            {
-                openFile.ShowDialog();
-                if (openFile.FileNames.Length == 1)
-                {
-                    foreach (string filename in openFile.FileNames)
-                        return filename;
-                }
-                else
-                {
-                    MessageBox.Show("하나의 엑셀 파일을 선택하세요.");
-                }
-            } while (openFile.FileNames.Length != 1);
-
-            return null;
-        }
+        
 
         private void InitHospitalList(List<String> excelList, String exFilePath)//병원정보 있는 엑셀파일이랑 메일정보 있는 엑셀파일이랑 2개가 있음.
         {
@@ -354,20 +316,79 @@ namespace MailSender
          * 4. FolderFullPath list가 없으면 어쩐담?
          * 
          * */
+
         private void EMail()
         {
-            String eMailList = GetExFilePath();
+            String eMailList = PathInfo.GetExFilePath();
 
             Array exData;
+            //(String)array.GetValue(i, 3) == "매월"
+            const int HOSNAME_COL = 1;
+            const int EMAIL_COL = 2;
+            const int FOLDERPATH_COL = 16;
+
+            const int ARRAY_WIDTH = 16;
+
+            int array_height;
 
             using (ExcelAccess servCheck = new ExcelAccess(eMailList, "aaaaaaaaa")) //open read only
             {
                 servCheck.SelectSheet("병원 - 2016");
                 exData = servCheck.GetRange("B2", "Q270");
+
+                array_height = exData.Length / ARRAY_WIDTH;
+
+                for(int i = 1; i <= array_height + 1; i++)
+                {
+                    //폴더path로 쿼리하여 hosName을 찾는다.
+                    List<String> hosNameList = dbhandler.SelectHos("Folder", (String)exData.GetValue(i, FOLDERPATH_COL));
+                    //Hosname과 email을 insert 한다.
+                    if(hosNameList.Count > 0)
+                    {
+                        //insert
+                    }
+                }
             }
+        }
+        /*
+        private String GetHosFolderPath()
+        {
+            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
+            string defaultFolder = @"\\Fileserver1\TechHeim\TH\병원";
+            if (Directory.Exists(defaultFolder))
+                folderDialog.SelectedPath = defaultFolder;
 
+            folderDialog.ShowDialog();
 
+            return folderDialog.SelectedPath;
         }
 
+        private String GetExFilePath()
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+
+            String defaultFolder = @"\\fileserver1\기술지원부\05_PS Team\유지보수 월별통계";
+            if (Directory.Exists(defaultFolder))
+                openFile.InitialDirectory = defaultFolder;
+
+            openFile.DefaultExt = "xlsx";
+
+            do
+            {
+                openFile.ShowDialog();
+                if (openFile.FileNames.Length == 1)
+                {
+                    foreach (string filename in openFile.FileNames)
+                        return filename;
+                }
+                else
+                {
+                    MessageBox.Show("하나의 엑셀 파일을 선택하세요.");
+                }
+            } while (openFile.FileNames.Length != 1);
+
+            return null;
+        }
+        */
     }
 }

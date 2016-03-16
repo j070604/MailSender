@@ -50,7 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DBHandler.cs" />
+    <Compile Include="EMailData.cs" />
     <Compile Include="ExcelAccess.cs" />
+    <Compile Include="PathInfo.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

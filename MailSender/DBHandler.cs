@@ -58,9 +58,34 @@ namespace MailSender
             return result;
         }
 
-        public int InsertEMail
+        public int InsertEMail(EMailData data)
+        {
+            int result = 0;
+            sqlConn.Open();
+            using(SQLiteTransaction transaction = sqlConn.BeginTransaction())
+            { 
+                using (SQLiteCommand sqlcmd = sqlConn.CreateCommand())
+                {
+                     
+                    sqlcmd.CommandText = "INSERT INTO EMail (Name, Mail) Values (@Name, @Mail);";
+                    sqlcmd.Parameters.Add(new SQLiteParameter("@Name", hosData.Name));
+                    sqlcmd.Parameters.Add(new SQLiteParameter("@Mail", hosData.Folder));
+                    try
+                    {
+                        result = sqlcmd.ExecuteNonQuery();
+                    }      
+                    catch
+                    {
+                        result = -1;
+                    }
+                    transaction.Commit();
+                }
+            }
+            sqlConn.Close();
+            return 0;
+        }
 
-        public List<String> SelectHos(String folderPath)
+        public List<String> SelectHos(String attName, String folderPath)
         {
             
             DataTable dt = new DataTable();
@@ -68,8 +93,9 @@ namespace MailSender
 
             using(SQLiteCommand sqlcmd = sqlConn.CreateCommand())
             {
-                sqlcmd.CommandText = "SELECT Name FROM Hospital WHERE Folder=@Folder";
+                sqlcmd.CommandText = "SELECT Name FROM Hospital WHERE @attName=@Folder";
 
+                sqlcmd.Parameters.Add(new SQLiteParameter("@attName", attName));
                 sqlcmd.Parameters.Add(new SQLiteParameter("@Folder", folderPath));
 
                 using(SQLiteDataReader dr = sqlcmd.ExecuteReader())
@@ -84,5 +110,6 @@ namespace MailSender
             }
             return list;
         }
+
     }
 }
