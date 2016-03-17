@@ -330,7 +330,7 @@ namespace MailSender
             const int ARRAY_WIDTH = 16;
 
             int array_height;
-
+            //dbhandler.SelectHos();
             using (ExcelAccess servCheck = new ExcelAccess(eMailList, "aaaaaaaaa")) //open read only
             {
                 servCheck.SelectSheet("병원 - 2016");
@@ -341,11 +341,12 @@ namespace MailSender
                 for(int i = 1; i <= array_height + 1; i++)
                 {
                     //폴더path로 쿼리하여 hosName을 찾는다.
-                    List<String> hosNameList = dbhandler.SelectHos("Folder", (String)exData.GetValue(i, FOLDERPATH_COL));
-                    //Hosname과 email을 insert 한다.
-                    if(hosNameList.Count > 0)
+                    String folder = ((String)exData.GetValue(i, FOLDERPATH_COL));
+                    List<String> hosNameList = dbhandler.SelectHos("Folder", folder);
+
+                    if (hosNameList.Count > 0) //Hosname과 email을 insert 한다.
                     {
-                        //insert
+                        dbhandler.InsertEMail(new EMailData((String)exData.GetValue(i, HOSNAME_COL), (String)exData.GetValue(i, EMAIL_COL)));
                     }
                 }
             }
