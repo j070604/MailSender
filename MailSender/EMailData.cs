@@ -22,7 +22,7 @@ namespace MailSender
             this.name = name;
             foreach(var mail in eMail.Split(','))
             {
-                mailList.Add(mail.Trim('<', '>'));
+                mailList.Add(mail.Trim().TrimStart('<').TrimEnd('>'));
             }
         }
     }

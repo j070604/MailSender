@@ -338,15 +338,19 @@ namespace MailSender
 
                 array_height = exData.Length / ARRAY_WIDTH;
 
-                for(int i = 1; i <= array_height + 1; i++)
+                for(int i = 1; i <= array_height; i++)
                 {
                     //폴더path로 쿼리하여 hosName을 찾는다.
                     String folder = ((String)exData.GetValue(i, FOLDERPATH_COL));
-                    List<String> hosNameList = dbhandler.SelectHos("Folder", folder);
+                    List<String> hosNameList = dbhandler.SelectHos(folder);
 
                     if (hosNameList.Count > 0) //Hosname과 email을 insert 한다.
                     {
-                        dbhandler.InsertEMail(new EMailData((String)exData.GetValue(i, HOSNAME_COL), (String)exData.GetValue(i, EMAIL_COL)));
+                        try
+                        {
+                            dbhandler.InsertEMail(new EMailData(hosNameList.First(), (String)exData.GetValue(i, EMAIL_COL)));
+                        }
+                        catch { }   
                     }
                 }
             }

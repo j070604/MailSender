@@ -71,6 +71,7 @@ namespace MailSender
                         sqlcmd.CommandText = "INSERT INTO EMail (Name, Mail) Values (@Name, @Mail);";
                         sqlcmd.Parameters.Add(new SQLiteParameter("@Name", data.name));
                         sqlcmd.Parameters.Add(new SQLiteParameter("@Mail", data.mailList[i]));
+
                         try
                         {
                             result += sqlcmd.ExecuteNonQuery();
@@ -87,7 +88,7 @@ namespace MailSender
             return 0;
         }
 
-        public List<String> SelectHos(String attName, String folderPath)
+        public List<String> SelectHos(String folderPath)
         {
             
             DataTable dt = new DataTable();
@@ -96,14 +97,8 @@ namespace MailSender
             sqlConn.Open();
             using(SQLiteCommand sqlcmd = sqlConn.CreateCommand())
             {
-                sqlcmd.CommandText = "SELECT Name FROM Hospital WHERE Folder=@Folder;";
+                sqlcmd.CommandText = "SELECT Name FROM Hospital WHERE Folder=@folder";
                 sqlcmd.Parameters.Add(new SQLiteParameter("@Folder", folderPath));
-
-                /*
-                 * sqlcmd.CommandText = "SELECT Name FROM Hospital WHERE @attName=@Folder;";
-                sqlcmd.Parameters.Add(new SQLiteParameter("@attName", attName));
-                sqlcmd.Parameters.Add(new SQLiteParameter("@Folder", folderPath));
-                 * */
 
                 using (SQLiteDataReader dr = sqlcmd.ExecuteReader())
                 {
@@ -119,21 +114,5 @@ namespace MailSender
             return list;
         }
 
-        public void SelectHos()
-        {
-            sqlConn.Open();
-            using(SQLiteCommand sqlcmd = sqlConn.CreateCommand())
-            {
-                sqlcmd.CommandText = "SELECT * FROM Hospital WHERE Name='공 내과 의원'";
-                using(SQLiteDataReader dr = sqlcmd.ExecuteReader())
-                {
-                    while(dr.Read())
-                    {
-                        string a = dr["Folder"].ToString();
-                    }
-                }
-            }
-            sqlConn.Close();
-        }
     }
 }
