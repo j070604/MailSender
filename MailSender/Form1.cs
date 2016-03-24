@@ -21,13 +21,14 @@ namespace MailSender
         private void Form1_Load(object sender, EventArgs e)
         {
             string connStr = @"\\fileserver1\기술지원부\05_PS Team\점검 사용 프로그램\MailSender\MailSender.db";
+            tBoxYear.Text = DateTime.Now.Year.ToString();
         }
 
         private void rBtnInclude_CheckedChanged(object sender, EventArgs e)
         {
-            if(rBtnExclude.Checked == true)
+            if(rBtnExclude.Checked == truerBtnExclude
             {
-                rBtnExclude.Checked = false;
+                ).Checked = false;
                 rBtnInclude.Checked = true;
             }
         }

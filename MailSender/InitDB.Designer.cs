@@ -38,6 +38,7 @@
             this.tBoxFolderName = new System.Windows.Forms.TextBox();
             this.btnSkip = new System.Windows.Forms.Button();
             this.btnInput = new System.Windows.Forms.Button();
+            this.btnEMail = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listView1
@@ -122,11 +123,22 @@
             this.btnInput.UseVisualStyleBackColor = true;
             this.btnInput.Click += new System.EventHandler(this.btnInput_Click);
             // 
+            // btnEMail
+            // 
+            this.btnEMail.Location = new System.Drawing.Point(610, 383);
+            this.btnEMail.Name = "btnEMail";
+            this.btnEMail.Size = new System.Drawing.Size(75, 23);
+            this.btnEMail.TabIndex = 9;
+            this.btnEMail.Text = "EMail";
+            this.btnEMail.UseVisualStyleBackColor = true;
+            this.btnEMail.Click += new System.EventHandler(this.btnEMail_Click);
+            // 
             // InitDB
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(789, 479);
+            this.Controls.Add(this.btnEMail);
             this.Controls.Add(this.btnInput);
             this.Controls.Add(this.btnSkip);
             this.Controls.Add(this.tBoxFolderName);
@@ -154,5 +166,6 @@
         private System.Windows.Forms.ColumnHeader FileFormat;
         private System.Windows.Forms.Button btnSkip;
         private System.Windows.Forms.Button btnInput;
+        private System.Windows.Forms.Button btnEMail;
     }
 }

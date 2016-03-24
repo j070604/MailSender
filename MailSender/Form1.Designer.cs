@@ -30,7 +30,6 @@
         {
             this.lblYear = new System.Windows.Forms.Label();
             this.lblMonth = new System.Windows.Forms.Label();
-            this.cBoxYear = new System.Windows.Forms.ComboBox();
             this.cBoxMonth = new System.Windows.Forms.ComboBox();
             this.tBoxSearch = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
@@ -48,6 +47,7 @@
             this.lViewHosList = new System.Windows.Forms.ListView();
             this.lViewSendList = new System.Windows.Forms.ListView();
             this.button1 = new System.Windows.Forms.Button();
+            this.tBoxYear = new System.Windows.Forms.TextBox();
             this.panel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,17 +69,22 @@
             this.lblMonth.TabIndex = 1;
             this.lblMonth.Text = "월 : ";
             // 
-            // cBoxYear
-            // 
-            this.cBoxYear.FormattingEnabled = true;
-            this.cBoxYear.Location = new System.Drawing.Point(47, 6);
-            this.cBoxYear.Name = "cBoxYear";
-            this.cBoxYear.Size = new System.Drawing.Size(121, 20);
-            this.cBoxYear.TabIndex = 2;
-            // 
             // cBoxMonth
             // 
             this.cBoxMonth.FormattingEnabled = true;
+            this.cBoxMonth.Items.AddRange(new object[] {
+            "01",
+            "02",
+            "03",
+            "04",
+            "05",
+            "06",
+            "07",
+            "08",
+            "09",
+            "10",
+            "11",
+            "12"});
             this.cBoxMonth.Location = new System.Drawing.Point(209, 6);
             this.cBoxMonth.Name = "cBoxMonth";
             this.cBoxMonth.Size = new System.Drawing.Size(121, 20);
@@ -236,11 +241,19 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // tBoxYear
+            // 
+            this.tBoxYear.Location = new System.Drawing.Point(47, 6);
+            this.tBoxYear.Name = "tBoxYear";
+            this.tBoxYear.Size = new System.Drawing.Size(121, 21);
+            this.tBoxYear.TabIndex = 21;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(944, 682);
+            this.Controls.Add(this.tBoxYear);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.lViewSendList);
             this.Controls.Add(this.lViewHosList);
@@ -255,7 +268,6 @@
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.tBoxSearch);
             this.Controls.Add(this.cBoxMonth);
-            this.Controls.Add(this.cBoxYear);
             this.Controls.Add(this.lblMonth);
             this.Controls.Add(this.lblYear);
             this.Name = "Form1";
@@ -272,7 +284,6 @@
 
         private System.Windows.Forms.Label lblYear;
         private System.Windows.Forms.Label lblMonth;
-        private System.Windows.Forms.ComboBox cBoxYear;
         private System.Windows.Forms.ComboBox cBoxMonth;
         private System.Windows.Forms.TextBox tBoxSearch;
         private System.Windows.Forms.Button btnSearch;
@@ -290,6 +301,7 @@
         private System.Windows.Forms.ListView lViewHosList;
         private System.Windows.Forms.ListView lViewSendList;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox tBoxYear;
     }
 }
 

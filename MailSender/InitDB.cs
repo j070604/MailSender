@@ -44,7 +44,7 @@ namespace MailSender
 
             Matching();
             */
-            EMail();
+
         }
         /**/
 
@@ -334,7 +334,7 @@ namespace MailSender
             using (ExcelAccess servCheck = new ExcelAccess(eMailList, "aaaaaaaaa")) //open read only
             {
                 servCheck.SelectSheet("병원 - 2016");
-                exData = servCheck.GetRange("B2", "Q270");
+                exData = servCheck.GetRange("B2", "Q286");
 
                 array_height = exData.Length / ARRAY_WIDTH;
 
@@ -342,7 +342,12 @@ namespace MailSender
                 {
                     //폴더path로 쿼리하여 hosName을 찾는다.
                     String folder = ((String)exData.GetValue(i, FOLDERPATH_COL));
-                    List<String> hosNameList = dbhandler.SelectHos(folder);
+                    if (String.IsNullOrEmpty(folder))
+                        continue;
+
+                    List<String> hosNameList = (dbhandler.SelectHos(folder.Replace("fileserver", "Fileserver")).Count == 0 ? 
+                                                dbhandler.SelectHos(folder.Replace("Fileserver", "fileserver")) : 
+                                                dbhandler.SelectHos(folder.Replace("fileserver", "Fileserver")));
 
                     if (hosNameList.Count > 0) //Hosname과 email을 insert 한다.
                     {
@@ -350,10 +355,18 @@ namespace MailSender
                         {
                             dbhandler.InsertEMail(new EMailData(hosNameList.First(), (String)exData.GetValue(i, EMAIL_COL)));
                         }
-                        catch { }   
+                        catch(Exception ex)
+                        {
+                            MessageBox.Show(hosNameList.First() + Environment.NewLine + ex.ToString());
+                        }   
                     }
                 }
             }
+        }
+
+        private void btnEMail_Click(object sender, EventArgs e)
+        {
+            EMail();
         }
         /*
         private String GetHosFolderPath()
