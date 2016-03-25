@@ -114,5 +114,37 @@ namespace MailSender
             return list;
         }
 
+        public List<lvData> SelectSentHosList(String year, String month)
+        {
+            DataTable dt = new DataTable();
+            List<lvData> list = new List<lvData>();
+
+            sqlConn.Open();
+            using (SQLiteCommand sqlcmd = sqlConn.CreateCommand())
+            {
+                sqlcmd.CommandText = "Select Hospital.Name, Hospital.FileFormat, MonthHistory.Date " + 
+                                     "From Hospital  Left Join (Select * From SendHistory Where Date=@Date) AS MonthHistory  On Hospital.Name = MonthHistory.Name";
+                String para = year + "-" + month;
+                sqlcmd.Parameters.Add(new SQLiteParameter("@Date", para));
+
+                using (SQLiteDataReader dr = sqlcmd.ExecuteReader())
+                {
+                    dt.Load(dr);
+                }
+
+                
+                foreach (var row in dt.AsEnumerable())
+                {
+                    lvData lv = new lvData();
+                    lv.hosName = row["Name"].ToString();
+                    lv.fileFormat = row["FileFormat"].ToString();
+                    lv.sendAlready = (row["Date"].ToString() == null) ? "X" : "O";
+                    list.Add(lv);
+                }
+            }
+            sqlConn.Close();
+            return list;
+        }
+
     }
 }

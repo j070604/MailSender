@@ -132,6 +132,7 @@
             this.btnAdd.TabIndex = 10;
             this.btnAdd.Text = "+";
             this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // btnRemove
             // 
@@ -141,6 +142,7 @@
             this.btnRemove.TabIndex = 11;
             this.btnRemove.Text = "-";
             this.btnRemove.UseVisualStyleBackColor = true;
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
             // btnSelectAll
             // 
@@ -150,6 +152,7 @@
             this.btnSelectAll.TabIndex = 12;
             this.btnSelectAll.Text = "모든 발송가능\r\n\r\n목록 선택";
             this.btnSelectAll.UseVisualStyleBackColor = true;
+            this.btnSelectAll.Click += new System.EventHandler(this.btnSelectAll_Click);
             // 
             // btnSelectMine
             // 
@@ -159,6 +162,7 @@
             this.btnSelectMine.TabIndex = 13;
             this.btnSelectMine.Text = "모든 내가 점검한 \r\n\r\n목록 선택\r\n";
             this.btnSelectMine.UseVisualStyleBackColor = true;
+            this.btnSelectMine.Click += new System.EventHandler(this.btnSelectMine_Click);
             // 
             // btnStartSend
             // 
@@ -221,6 +225,7 @@
             this.lViewHosList.Size = new System.Drawing.Size(769, 289);
             this.lViewHosList.TabIndex = 18;
             this.lViewHosList.UseCompatibleStateImageBehavior = false;
+            this.lViewHosList.View = System.Windows.Forms.View.Details;
             // 
             // lViewSendList
             // 
@@ -230,6 +235,7 @@
             this.lViewSendList.Size = new System.Drawing.Size(769, 289);
             this.lViewSendList.TabIndex = 19;
             this.lViewSendList.UseCompatibleStateImageBehavior = false;
+            this.lViewSendList.View = System.Windows.Forms.View.Details;
             // 
             // button1
             // 

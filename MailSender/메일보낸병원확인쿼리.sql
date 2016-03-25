@@ -1,0 +1,1 @@
+Select Hospital.Name, Hospital.Folder, Hospital.FileFormat, MonthHistory.Date From Hospital  Left Join (Select * From SendHistory Where Date='2016-03') AS MonthHistory  On Hospital.Name = MonthHistory.Name
